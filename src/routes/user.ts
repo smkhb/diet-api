@@ -14,4 +14,9 @@ export async function user(app: FastifyInstance) {
 
     return reply.code(201).send()
   })
+  app.get('/', async () => {
+    const users = await knex('users').select('*')
+
+    return { users }
+  })
 }
