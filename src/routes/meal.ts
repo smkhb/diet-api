@@ -6,17 +6,19 @@ import { randomUUID } from 'node:crypto'
 
 export async function meal(app: FastifyInstance) {
   app.post('/', async (request, reply) => {
-    const createMealSchema = z.object({
+    const schemaCreateMeal = z.object({
+      user_id: z.string(),
       name: z.string(),
       description: z.string(),
       is_in_diet: z.boolean(),
     })
-    const { name, description, is_in_diet } = createMealSchema.parse(
+    const { user_id, name, description, is_in_diet } = schemaCreateMeal.parse(
       request.body,
     )
 
     await knex('meals').insert({
-      id: randomUUID(),
+      meal_id: randomUUID(),
+      user_id,
       name,
       description,
       is_in_diet,
@@ -25,45 +27,49 @@ export async function meal(app: FastifyInstance) {
     return reply.code(201).send()
   })
 
-  app.get('/', async () => {
-    const meals = await knex('meals').select('*')
+  app.get('/:id', async (request) => {
+    const schemaGetId = z.object({
+      id: z.string(),
+    })
+    const { id } = schemaGetId.parse(request.params)
+    const meals = await knex('meals').where({ user_id: id }).select('*')
 
     return { meals }
   })
 
   app.patch('/:id', async (request) => {
-    const updateMealSchema = z.object({
+    const schemaUpdateMeal = z.object({
       name: z.string().optional(),
       description: z.string().optional(),
       is_in_diet: z.boolean().optional(),
-      updated_at: z.string().optional(),
     })
 
-    const { name, description, is_in_diet, updated_at } =
-      updateMealSchema.parse(request.body)
+    const { name, description, is_in_diet } = schemaUpdateMeal.parse(
+      request.body,
+    )
 
-    const getMealIdSchema = z.object({
+    const schemaGetId = z.object({
       id: z.string(),
     })
-    const { id } = getMealIdSchema.parse(request.params)
+    const { id } = schemaGetId.parse(request.params)
 
-    const updated = await knex('meals').where({ id }).update({
+    const updated = await knex('meals').where({ meal_id: id }).update({
       name,
       description,
       is_in_diet,
-      updated_at,
+      updated_at: knex.fn.now(),
     })
 
     return { updated }
   })
 
   app.delete('/:id', async (request) => {
-    const getMealIdSchema = z.object({
+    const schemaGetId = z.object({
       id: z.string(),
     })
-    const { id } = getMealIdSchema.parse(request.params)
+    const { id } = schemaGetId.parse(request.params)
 
-    const deleted = await knex('meals').where({ id }).delete()
+    const deleted = await knex('meals').where({ meal_id: id }).delete()
 
     return { deleted }
   })
