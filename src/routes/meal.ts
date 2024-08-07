@@ -16,7 +16,7 @@ export async function meal(app: FastifyInstance) {
     )
 
     await knex('meals').insert({
-      id: randomUUID(),
+      meal_id: randomUUID(),
       name,
       description,
       is_in_diet,
@@ -43,11 +43,11 @@ export async function meal(app: FastifyInstance) {
       updateMealSchema.parse(request.body)
 
     const getMealIdSchema = z.object({
-      id: z.string(),
+      meal_id: z.string(),
     })
-    const { id } = getMealIdSchema.parse(request.params)
+    const { meal_id } = getMealIdSchema.parse(request.params)
 
-    const updated = await knex('meals').where({ id }).update({
+    const updated = await knex('meals').where({ meal_id }).update({
       name,
       description,
       is_in_diet,
@@ -59,11 +59,11 @@ export async function meal(app: FastifyInstance) {
 
   app.delete('/:id', async (request) => {
     const getMealIdSchema = z.object({
-      id: z.string(),
+      meal_id: z.string(),
     })
-    const { id } = getMealIdSchema.parse(request.params)
+    const { meal_id } = getMealIdSchema.parse(request.params)
 
-    const deleted = await knex('meals').where({ id }).delete()
+    const deleted = await knex('meals').where({ meal_id }).delete()
 
     return { deleted }
   })
