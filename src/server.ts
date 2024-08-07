@@ -1,9 +1,11 @@
 import fastify from 'fastify'
-import { createUser } from './routes/createUser'
+import { user } from './routes/user'
+import { meal } from './routes/meal'
 
 const app = fastify()
 
-app.register(createUser, { prefix: '/user' })
+app.register(user, { prefix: '/users' })
+app.register(meal, { prefix: '/meals' })
 
 app.listen({ port: 3333 }).then(() => {
   console.log('Server is running 3333')

@@ -3,7 +3,7 @@ import { knex } from '../databse'
 import { z } from 'zod'
 import { randomUUID } from 'node:crypto'
 
-export async function createUser(app: FastifyInstance) {
+export async function user(app: FastifyInstance) {
   app.post('/', async (request, reply) => {
     const createUserSchema = z.object({
       name: z.string(),
