@@ -1,9 +1,11 @@
 import fastify from 'fastify'
+import { knex } from './databse'
 
 const app = fastify()
 
 app.get('/hello', async () => {
-  return 'hello world'
+  const test = await knex('sqlite_schema').select('*')
+  return test
 })
 
 app.listen({ port: 3333 }).then(() => {
