@@ -23,6 +23,13 @@ My second API
   - Melhor sequência de refeições dentro da dieta
 - O usuário só pode visualizar, editar e apagar as refeições o qual ele criou
 
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`DATABASE_URL`
+`NODE_ENV`
+
 ## Stack utilizada
 
 **Back-end:** Node, Fastify, Typescript, Knex
