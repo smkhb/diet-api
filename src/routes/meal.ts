@@ -32,7 +32,12 @@ export async function meal(app: FastifyInstance) {
       id: z.string(),
     })
     const { id } = schemaGetId.parse(request.params)
-    const meals = await knex('meals').where({ user_id: id }).select('*')
+
+    let meals = await knex('meals').where({ user_id: id }).select('*')
+
+    if (meals.length === 0) {
+      meals = await knex('meals').where({ meal_id: id }).select('*')
+    }
 
     return { meals }
   })
