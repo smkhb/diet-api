@@ -1,7 +1,5 @@
 # Daily Diet API
 
-My second API
-
 ## RF
 
 - Deve ser possível criar um usuário
